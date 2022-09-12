@@ -1,0 +1,37 @@
+// noinspection JSUnusedGlobalSymbols
+
+declare const TEAM_RADIANT;
+declare const TEAM_DIRE;
+
+declare type DotaTeam = TEAM_RADIANT & TEAM_DIRE;
+
+declare const LANE_TOP;
+declare const LANE_MID;
+declare const LANE_BOT;
+declare const LANE_NONE;
+
+declare type DotaLane = LANE_TOP & LANE_MID & LANE_BOT & LANE_NONE;
+
+declare const ITEM_SLOT_TYPE_MAIN;
+declare const ITEM_SLOT_TYPE_INVALID;
+declare const ITEM_SLOT_TYPE_BACKPACK;
+declare const ITEM_SLOT_TYPE_STASH;
+declare type ItemSlot = ITEM_SLOT_TYPE_MAIN & ITEM_SLOT_TYPE_INVALID & ITEM_SLOT_TYPE_BACKPACK & ITEM_SLOT_TYPE_STASH;
+
+declare const UNIT_LIST_ALL;
+declare const UNIT_LIST_ALLIES;
+declare const UNIT_LIST_ALLIED_HEROES;
+declare const UNIT_LIST_ALLIED_CREEPS;
+declare const UNIT_LIST_ALLIED_WARDS;
+declare const UNIT_LIST_ALLIED_BUILDINGS;
+declare const UNIT_LIST_ENEMIES;
+declare const UNIT_LIST_ENEMY_HEROES;
+declare const UNIT_LIST_ENEMY_CREEPS;
+declare const UNIT_LIST_ENEMY_WARDS;
+declare const UNIT_LIST_NEUTRAL_CREEPS;
+declare const UNIT_LIST_ENEMY_BUILDINGS;
+
+declare type DotaUnitType = UNIT_LIST_ALL & UNIT_LIST_ALLIES & UNIT_LIST_ALLIED_HEROES &
+    UNIT_LIST_ALLIED_CREEPS & UNIT_LIST_ALLIED_WARDS & UNIT_LIST_ALLIED_BUILDINGS &
+    UNIT_LIST_ENEMIES & UNIT_LIST_ENEMY_HEROES & UNIT_LIST_ENEMY_CREEPS & UNIT_LIST_ENEMY_WARDS &
+    UNIT_LIST_NEUTRAL_CREEPS & UNIT_LIST_ENEMY_BUILDINGS;
