@@ -7,6 +7,7 @@ export class Hero extends Unit<Hero>() {
     team: Team;
     baseMovementSpeed: number;
     offensivePower: number | null = null;
+    level: number;
 
     static createInstance(hUnit: hUnit): Hero {
         return new Hero(hUnit);
@@ -21,6 +22,7 @@ export class Hero extends Unit<Hero>() {
         super(hUnit);
 
         this.team = Team.fromDotaTeam(hUnit.GetTeam());
+        this.level = hUnit.GetLevel();
 
         if (this.team === Team.currentTeam) {
             this.offensivePower = this.hUnit.GetOffensivePower();
@@ -55,6 +57,6 @@ export class Hero extends Unit<Hero>() {
     }
 
     get isAttacking(): boolean {
-        return !!this.hUnit.GetAttackTarget();
+        return !!this.getAttackTarget();
     }
 }

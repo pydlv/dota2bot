@@ -11,11 +11,14 @@ class LastHitAction implements Action {
         this.ev = 0;
         this.timeCost = 0;
         this.hero = hero;
+        this.isPossible = true;
         // TODO: implement this
     }
 
     execute(): void {
     }
+
+    isPossible: boolean;
 
 
 }

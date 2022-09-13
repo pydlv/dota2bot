@@ -9,4 +9,6 @@ export function debugTick() {
     } else {
         lastUpdate = now;
     }
+
+    
 }

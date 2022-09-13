@@ -1,12 +1,3 @@
-// export interface Unit<T> {
-//     instances: Map<hUnit, T>;
-//
-//     hUnit: hUnit,
-//     attackTarget: Unit<any>
-//
-//     getInstance(hUnit: hUnit): T;
-// }
-
 export function Unit<T>() {
     abstract class Unit {
         private static instances: Map<hUnit, T> = new Map();
@@ -46,10 +37,25 @@ export function Unit<T>() {
             return Array.from(this.instances.values());
         }
 
-        // get attackTarget(): Unit {
-        //     // Check if attack target is tower
-        //     return this.hUnit.GetAttackTarget();
-        // }
+        static contains(hUnit: hUnit): boolean {
+            return this.instances.has(hUnit);
+        }
+
+        getAttackTarget(): hUnit | null {
+            const posIsVisible = IsLocationVisible(this.hUnit.GetLocation());
+            if (posIsVisible) {
+                return this.hUnit.GetAttackTarget();
+            }
+            return null;
+        }
+
+        isVisible(): boolean {
+            return IsLocationVisible(this.hUnit.GetLocation());
+        }
+
+        static getNearby(pos: vector, radius: number = 1600) {
+            return this.all().filter(unit => GetUnitToLocationDistance((<Unit>unit).hUnit, pos) <= radius);
+        }
     }
 
     return Unit;

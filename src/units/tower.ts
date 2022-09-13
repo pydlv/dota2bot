@@ -1,7 +1,8 @@
 import {Hero} from "./hero";
-import {DistanceResult} from "../util";
+import {euclideanDistance} from "../util";
 import {Unit} from "./units";
 import {Team} from "../team/team";
+import {DistanceResult} from "../actions/travel_recommendations";
 
 export class Tower extends Unit<Tower>() {
     team: Team;
@@ -22,11 +23,11 @@ export class Tower extends Unit<Tower>() {
         this.team = Team.fromDotaTeam(hUnit.GetTeam());
     }
 
-    static getClosestTowers(hero: Hero, team: Team) {
+    static getClosestTowers(pos: vector, team: Team) {
         const towers: DistanceResult<Tower>[] = Tower.all().filter(tower => tower.team.matchTeam(team.enumTeam))
             .map(tower => ({
                 item: tower,
-                distance: GetUnitToLocationDistance(hero.hUnit, tower.hUnit)
+                distance: euclideanDistance(pos, tower.hUnit.GetLocation())
             }));
 
         towers.sort((a, b) => a.distance - b.distance);

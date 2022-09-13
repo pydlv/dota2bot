@@ -1,4 +1,5 @@
 import {Unit} from "./units";
+import {Team} from "../team/team";
 
 export interface Minion {
     health: number,
@@ -6,6 +7,8 @@ export interface Minion {
 }
 
 export class Minion extends Unit<Minion>() {
+    team: Team;
+
     static createInstance(hUnit: hUnit) {
         return new Minion(hUnit);
     }
@@ -19,5 +22,6 @@ export class Minion extends Unit<Minion>() {
         super(hUnit);
 
         this.health = hUnit.GetHealth();
+        this.team = Team.fromDotaTeam(hUnit.GetTeam());
     }
 }

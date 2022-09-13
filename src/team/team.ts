@@ -41,4 +41,14 @@ export class Team {
             return this.enumTeam === EnumTeam.All;
         }
     }
+
+    otherTeam() {
+        if (this.enumTeam === EnumTeam.Radiant) {
+            return Team.dire;
+        } else if (this.enumTeam === EnumTeam.Dire) {
+            return Team.radiant;
+        } else {
+            throw "Invalid team value";
+        }
+    }
 }

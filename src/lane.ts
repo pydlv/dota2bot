@@ -2,7 +2,7 @@ import {Minion} from "./units/minion";
 import {Hero} from "./units/hero";
 
 // The maximum distance a unit can be from the front for it to be considered part of it.
-const UNIT_FRONT_DISTANCE = 1000;
+const UNIT_FRONT_DISTANCE = 1600;
 
 export class Lane {
     protected static instances: Map<DotaLane, Lane> = new Map();

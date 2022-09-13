@@ -1,8 +1,16 @@
 import {Hero} from "../units/hero";
 import {Action} from "./actions";
 import {Lane} from "../lane";
-import {getTravelRecommendation, TransportMode, TravelRecommendation} from "../util";
-import {Tower} from "../units/tower";
+import {calculateRiskCost} from "./risk";
+import {Minion} from "../units/minion";
+import {moveDirect, moveUsingItem} from "./movement";
+import {Path} from "./path";
+import {
+    executeTravelRecommendation,
+    getTravelRecommendation,
+    TransportMode,
+    TravelRecommendation
+} from "./travel_recommendations";
 
 const DISTANCE_HERO_IS_IN_POSITION = 1599;
 const TIME_REQUIRED_TO_KILL_MULTIPLIER = 1;
@@ -17,12 +25,39 @@ export class ClearWaveAction implements Action {
     travelRecommendation: TravelRecommendation | undefined;
     isInPosition: boolean;
 
+    targetCreep: Minion | null;
+
     constructor(lane: Lane, hero: Hero) {
         this.lane = lane;
         this.hero = hero;
 
+        // Find the target creep
+        const enemyLaneCreeps = this.lane.enemyFrontMinions;
+        // enemyLaneCreeps.sort((a, b) => GetUnitToUnitDistance(hero.hUnit, a.hUnit) -
+        //     GetUnitToUnitDistance(hero.hUnit, b.hUnit));
+        const attackDamage = hero.hUnit.GetAttackDamage();
+        enemyLaneCreeps.sort((a, b) => {
+            if (b.hUnit.GetHealth() <= attackDamage) return 1;
+            if (a.hUnit.GetHealth() <= attackDamage) return -1;
+            if (b.hUnit.GetHealth() >= a.hUnit.GetHealth()) return 1;
+            else return b.hUnit.GetHealth() - a.hUnit.GetHealth();
+        });
+
+        if (enemyLaneCreeps.length > 0) {
+            this.targetCreep = enemyLaneCreeps[0]!;
+        } else {
+            this.targetCreep = null;
+        }
+
+        // Find the EV
         this.ev = lane.enemyFrontMinions.length * EV_PER_CREEP /
             ((lane.allyFrontHeroes.length + 1) * ALLIED_HERO_ALREADY_IN_LANE_PENALTY_MULTIPLIER);
+
+        if (this.targetCreep !== null) {
+            this.ev -= calculateRiskCost(this.hero, this.targetCreep.hUnit.GetLocation(), false);
+        } else {
+            this.ev -= calculateRiskCost(this.hero, this.lane.frontPos, false);
+        }
 
         // Find the time we need to clear the wave once we're in position
         const waveHealth = lane.enemyFrontMinions.reduce(
@@ -45,42 +80,20 @@ export class ClearWaveAction implements Action {
         this.timeCost = timeCost;
     }
 
-    calcProbableHealthLoss() {
-        const closestTowers = Tower.getClosestTowers(this.hero, this.hero.team);
-
-        if (closestTowers.length > 0) {
-            const closestTower = closestTowers[0]!;
-
-
-        }
-    }
-
     execute(): void {
         if (this.isInPosition) {
             // We are in the correct position, clear the creeps
             // Find the closest creep and attack if we aren't already in the middle of an attack.
             if (this.hero.isAttacking) return;
 
-            const enemyLaneCreeps = this.lane.enemyFrontMinions;
-            if (enemyLaneCreeps.length > 0) {
-                const creepToAttack = enemyLaneCreeps[0]!;
-                this.hero.hUnit.Action_AttackUnit(creepToAttack.hUnit, true);
+            if (this.targetCreep) {
+                this.hero.hUnit.Action_AttackUnit(this.targetCreep.hUnit, true);
                 return;
-            } else {
-                console.warn("Expected to find enemy creeps in lane but didn't.");
             }
         } else {
-            if (this.travelRecommendation!.mode === TransportMode.Teleport) {
-                const tpScroll = this.hero.getItemByName("item_tpscroll");
-
-                if (tpScroll) {
-                    this.hero.hUnit.Action_UseAbilityOnLocation(tpScroll.hItem, this.lane.frontPos);
-                } else {
-                    console.error("Tried to teleport when there was no tp scroll equipped.");
-                }
-            } else {
-                this.hero.hUnit.Action_MoveToLocation(this.lane.frontPos);
-            }
+            executeTravelRecommendation(this.hero, this.travelRecommendation!, this.lane.frontPos);
         }
     }
+
+    isPossible: boolean = true;
 }
