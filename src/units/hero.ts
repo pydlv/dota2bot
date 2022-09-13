@@ -1,18 +1,28 @@
 import {Item} from "../items";
+import {Team} from "../team/team";
+import {Unit} from "./units";
 
-export class Hero {
-    hUnit: hUnit;
+export class Hero extends Unit<Hero>() {
     inventory: Item[];
-    team: DotaTeam;
+    team: Team;
     baseMovementSpeed: number;
     offensivePower: number | null = null;
 
-    constructor(hUnit: hUnit) {
-        this.hUnit = hUnit;
+    static createInstance(hUnit: hUnit): Hero {
+        return new Hero(hUnit);
+    }
 
-        this.team = this.hUnit.GetTeam();
+    static populate() {
+        GetUnitList(UNIT_LIST_ENEMY_HEROES).concat(GetUnitList(UNIT_LIST_ALLIED_HEROES))
+            .map(hUnit => Hero.getInstance(hUnit));
+    }
 
-        if (this.team === GetTeam()) {
+    protected constructor(hUnit: hUnit) {
+        super(hUnit);
+
+        this.team = Team.fromDotaTeam(hUnit.GetTeam());
+
+        if (this.team === Team.currentTeam) {
             this.offensivePower = this.hUnit.GetOffensivePower();
         }
 

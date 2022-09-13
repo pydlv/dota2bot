@@ -20,7 +20,11 @@ declare interface hUnit {
     Action_MoveToLocation(location: vector)
 
     Action_UseAbilityOnLocation(hItem: hItem, location: vector): void;
+
+    IsTower(): boolean;
 }
+
+declare type dotaHUnit = hUnit;
 
 declare interface vector {
 
@@ -37,6 +41,7 @@ declare function GetTeam(): DotaTeam;
 
 declare function GetUnitList(uUnitType: DotaUnitType): hUnit[];
 
+declare function GetUnitToUnitDistance(unit1: hUnit, unit2: hUnit): number;
 declare function GetUnitToLocationDistance(hUnit: hUnit, vLocation: vector): number;
 
 declare function GetLaneFrontAmount(team: DotaTeam, lane: DotaLane, bIgnoreTowers: boolean): number;

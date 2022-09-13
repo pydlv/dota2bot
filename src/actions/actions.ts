@@ -1,6 +1,6 @@
 import {Hero} from "../units/hero";
-import {Lane} from "../lane";
 import {ClearWaveAction} from "./clear_wave";
+import {Lane} from "../lane";
 
 export interface Action {
     ev: number,
@@ -16,13 +16,7 @@ function score(action: Action) {
 export function generateActions(hero: Hero) {
     const actions = [];
 
-    const lanes = [
-        new Lane(LANE_TOP),
-        new Lane(LANE_MID),
-        new Lane(LANE_BOT)
-    ];
-
-    for (const lane of lanes) {
+    for (const lane of Lane.lanes) {
         actions.push(new ClearWaveAction(lane, hero));
     }
 

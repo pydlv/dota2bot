@@ -1,11 +1,18 @@
-import {debugTick} from "./dota_debug";
 import {generateActions} from "./actions/actions";
 import {Hero} from "./units/hero";
+import {reloadUnits} from "./units/unit_types";
+import {dotaTeamToEnumTeam} from "./team/enumTeam";
+import {Team} from "./team/team";
+import {Lane} from "./lane";
 
 export default function tick() {
-    // debugTick();
+    // Should clear out old states
+    Team.setCurrentTeam(Team.fromEnumTeam(dotaTeamToEnumTeam(GetTeam())));
+    reloadUnits();
+    Lane.reset();
 
-    const hero = new Hero(GetBot());
+    // debugTick();
+    const hero = Hero.getInstance(GetBot());
 
     const actions = generateActions(hero);
 

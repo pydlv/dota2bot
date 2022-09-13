@@ -2,6 +2,7 @@ import {Hero} from "../units/hero";
 import {Action} from "./actions";
 import {Lane} from "../lane";
 import {getTravelRecommendation, TransportMode, TravelRecommendation} from "../util";
+import {Tower} from "../units/tower";
 
 const DISTANCE_HERO_IS_IN_POSITION = 1599;
 const TIME_REQUIRED_TO_KILL_MULTIPLIER = 1;
@@ -44,10 +45,20 @@ export class ClearWaveAction implements Action {
         this.timeCost = timeCost;
     }
 
+    calcProbableHealthLoss() {
+        const closestTowers = Tower.getClosestTowers(this.hero, this.hero.team);
+
+        if (closestTowers.length > 0) {
+            const closestTower = closestTowers[0]!;
+
+
+        }
+    }
+
     execute(): void {
         if (this.isInPosition) {
             // We are in the correct position, clear the creeps
-            // Find the closest creep and attack if we aren't aready in the middle of an attack.
+            // Find the closest creep and attack if we aren't already in the middle of an attack.
             if (this.hero.isAttacking) return;
 
             const enemyLaneCreeps = this.lane.enemyFrontMinions;

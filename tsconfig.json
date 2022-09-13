@@ -108,10 +108,4 @@
     "src/luaHelpers.lua",
     "main.ts"
   ]
-  //  "tstl": {
-//    "luaPlugins": [
-//      // TypeScriptToLua can load plugins written in TypeScript using `ts-node`
-//      { "name": "./importModPlugin.ts" },
-//    ]
-//  }
 }

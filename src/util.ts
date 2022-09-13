@@ -1,4 +1,5 @@
 import {Hero} from "./units/hero";
+import {Team} from "./team/team";
 
 export enum TransportMode {
     Walk,
@@ -35,7 +36,7 @@ export function getTravelRecommendation(hero: Hero, pos: vector, canTeleport: bo
 
 export function getClosestTeleportLocation(hero: Hero, pos: vector) {
     // TODO: implement boots of travel, etc.
-    const alliedBuildings = GetUnitList(hero.team === GetTeam() ?
+    const alliedBuildings = GetUnitList(hero.team === Team.currentTeam ?
         UNIT_LIST_ALLIED_BUILDINGS : UNIT_LIST_ENEMY_BUILDINGS);
 
     alliedBuildings.sort((a, b) =>
@@ -43,4 +44,9 @@ export function getClosestTeleportLocation(hero: Hero, pos: vector) {
     );
 
     return alliedBuildings[0]!;
+}
+
+export interface DistanceResult<T> {
+    item: T,
+    distance: number
 }

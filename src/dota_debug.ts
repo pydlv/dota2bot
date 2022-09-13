@@ -9,11 +9,4 @@ export function debugTick() {
     } else {
         lastUpdate = now;
     }
-
-    const bot = GetBot();
-
-    // const inventoryItems = getInventoryItems(bot);
-    // for (const item of inventoryItems) {
-    //     printPairs(item);
-    // }
 }
